@@ -1,0 +1,41 @@
+version: "3.8"
+services:
+
+  fe:
+    build: Zyon-Dating-FE
+    container_name: fe
+    ports:
+      - 4200:80
+    networks:
+      - spring-cloud-network
+    depends_on:
+      - be
+  be:
+    build: Zyon-Dating-BE
+    container_name: be
+    ports:
+      - 19000:9000
+    networks:
+      - spring-cloud-network
+    depends_on:
+      - postgresso
+
+  postgresso:
+    build: db
+    container_name: db
+    restart: always
+    ports:
+      - 7777:5432
+    environment:
+      POSTGRES_PASSWORD: root
+    volumes:
+      - postgvol:/var/lib/postgresql/data
+    networks:
+      - spring-cloud-network
+
+
+networks:
+  spring-cloud-network:
+
+volumes:
+  postgvol:
